@@ -1,3 +1,6 @@
+GET http://localhost:8080/param/Rishav
+
+###
 GET http://localhost:8080/query?name=Rishav
 
 ###
