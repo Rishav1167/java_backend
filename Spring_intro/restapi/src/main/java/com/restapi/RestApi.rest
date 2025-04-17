@@ -1,3 +1,7 @@
+PUT http://localhost:8080/hello/put/Rishav?lastName=Thakur
+
+
+###
 POST http://localhost:8080/hello/post
 Content-Type: application/json
 
@@ -7,10 +11,10 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:8080/param/Rishav
+GET http://localhost:8080/hello/param/Rishav
 
 ###
-GET http://localhost:8080/query?name=Rishav
+GET http://localhost:8080/hello/?name=Rishav
 
 ###
 GET localhost:8080
