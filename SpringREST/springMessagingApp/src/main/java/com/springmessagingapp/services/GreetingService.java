@@ -23,11 +23,11 @@ public class GreetingService {
         return greeting;
     }
 
-    public List<Greetings> getGreetings() {
-        return greetingRepository.findAll();
-    }
-
     public Greetings getGreetingById(long id) {
         return greetingRepository.findById(id).get();
+    }
+    
+    public List<Greetings> getGreetings() {
+        return greetingRepository.findAll();
     }
 }
