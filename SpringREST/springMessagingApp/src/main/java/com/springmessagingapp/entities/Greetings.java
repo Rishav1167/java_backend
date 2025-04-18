@@ -1,19 +1,23 @@
 package com.springmessagingapp.entities;
 
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.*;
 
 import java.util.concurrent.atomic.AtomicLong;
 
 @Getter
 @Setter
+@Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Greetings {
-    private static final AtomicLong counter = new AtomicLong();
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String content;
 
-    public Greetings(String content) {
-        this.id = counter.incrementAndGet();
-        this.content = content;
-    }
 }
