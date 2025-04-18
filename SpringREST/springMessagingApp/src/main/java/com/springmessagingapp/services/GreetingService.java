@@ -41,4 +41,12 @@ public class GreetingService {
         return greeting;
     }
 
+    public boolean deleteGreetingById(long id) {
+        if (!greetingRepository.existsById(id)) {
+            return false;
+        }
+        greetingRepository.deleteById(id);
+        greetingRepository.flush();
+        return !greetingRepository.existsById(id);
+    }
 }

@@ -55,4 +55,12 @@ public class GreetingController {
     ){
         return new ResponseEntity<>(greetingService.updateGreetingById(id, firstname, lastname), HttpStatus.OK);
     }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Greetings> deletingGreeting(@PathVariable long id) {
+        if (greetingService.deleteGreetingById(id)) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 }
