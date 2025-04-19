@@ -26,8 +26,27 @@ public class GreetingService {
     public Greetings getGreetingById(long id) {
         return greetingRepository.findById(id).get();
     }
-    
+
     public List<Greetings> getGreetings() {
         return greetingRepository.findAll();
+    }
+
+    public Greetings updateGreetingById(long id, String firstname , String lastname) {
+        if (!greetingRepository.existsById(id)) {
+            return null;
+        }
+        Greetings greeting = Greetings.builder().content(("Hello " + firstname + " " + lastname).trim()).build();
+        greeting.setId(id);
+        greetingRepository.save(greeting);
+        return greeting;
+    }
+
+    public boolean deleteGreetingById(long id) {
+        if (!greetingRepository.existsById(id)) {
+            return false;
+        }
+        greetingRepository.deleteById(id);
+        greetingRepository.flush();
+        return !greetingRepository.existsById(id);
     }
 }
