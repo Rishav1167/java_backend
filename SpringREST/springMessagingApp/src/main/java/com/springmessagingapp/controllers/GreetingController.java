@@ -28,7 +28,7 @@ public class GreetingController {
             @RequestParam (value = "firstname" , defaultValue = "")String firstname,
             @RequestParam (value = "lastname",defaultValue = "")String lastname)
     {
-       
+
          return new ResponseEntity<>(
                  greetingService.getGreetings(),
                  HttpStatus.OK);
@@ -40,5 +40,27 @@ public class GreetingController {
             @RequestParam(value = "lastname" , defaultValue = "") String lastname
     ) {
         return new ResponseEntity<>(greetingService.addGreeting(firstname,lastname), HttpStatus.OK);
+    }
+
+    @GetMapping("findByid")
+    public ResponseEntity<Greetings> getGreetingById(@RequestParam("id") long id) {
+        return new ResponseEntity<>(greetingService.getGreetingById(id), HttpStatus.OK);
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity<Greetings>updatingGreeting(
+            @PathVariable long id,
+            @RequestParam(value = "firstname" , defaultValue = "")String firstname,
+            @RequestParam(value = "lastname" , defaultValue = "") String lastname
+    ){
+        return new ResponseEntity<>(greetingService.updateGreetingById(id, firstname, lastname), HttpStatus.OK);
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Greetings> deletingGreeting(@PathVariable long id) {
+        if (greetingService.deleteGreetingById(id)) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }
