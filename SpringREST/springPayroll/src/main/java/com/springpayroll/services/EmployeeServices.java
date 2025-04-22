@@ -48,4 +48,14 @@ public class EmployeeServices {
         return false;
     }
 
+    public EmployeeDTO updateEmployeeSalary(int employeeId, int newSalary) {
+        Employee employee = employeeRepository.findById(employeeId).orElse(null);
+        if (employee == null) {
+            return null;
+        }
+        employee.getPayroll().setSalary(newSalary);
+        Employee updatedEmployee = employeeRepository.save(employee);
+        return employeeMapper.toDTO(updatedEmployee);
+    }
+
 }

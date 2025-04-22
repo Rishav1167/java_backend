@@ -43,4 +43,13 @@ public class EmployeeController {
     public ResponseEntity<Boolean> deleteEmployee(@PathVariable int id) {
         return new ResponseEntity<>(employeeService.deleteEmployee(id) , HttpStatus.OK);
      }
+
+    @PutMapping("/update-salary/{id}")
+    public ResponseEntity<EmployeeDTO> updateSalary(@PathVariable int id, @RequestParam int salary) {
+        EmployeeDTO updatedEmployee = employeeService.updateEmployeeSalary(id, salary);
+        if (updatedEmployee == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(updatedEmployee, HttpStatus.OK);
+    }
 }
