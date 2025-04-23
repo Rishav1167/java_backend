@@ -2,6 +2,7 @@ package com.springpayroll.services;
 
 import com.springpayroll.dtos.PayrollDTO;
 import com.springpayroll.entities.Payroll;
+import com.springpayroll.exceptions.PayrollException;
 import com.springpayroll.mappings.PayrollMapper;
 import com.springpayroll.repositories.PayrollRepository;
 import jakarta.persistence.EntityManager;
@@ -26,8 +27,9 @@ public class PayrollServices {
     private EntityManager entityManager;
 
     public PayrollDTO getPayrollById(int id) {
-        Payroll payroll = payrollRepository.findById(id).orElse(null);
-        return payroll != null ? payrollMapper.toDTO(payroll) : null;
+        Payroll payroll = payrollRepository.findById(id)
+                .orElseThrow(() -> new PayrollException("Payroll record with ID " + id + " not found."));
+        return payrollMapper.toDTO(payroll);
     }
 
 
