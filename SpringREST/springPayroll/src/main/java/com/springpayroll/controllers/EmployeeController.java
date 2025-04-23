@@ -3,6 +3,7 @@ package com.springpayroll.controllers;
 import com.springpayroll.dtos.EmployeeDTO;
 import com.springpayroll.services.EmployeeServices;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ public class EmployeeController {
     }
 
     @PostMapping("/post")
-    public ResponseEntity<EmployeeDTO> saveEmployee(@RequestBody EmployeeDTO employeeDTO) {
+    public ResponseEntity<EmployeeDTO> saveEmployee(@Valid @RequestBody EmployeeDTO employeeDTO) {
         EmployeeDTO savedEmployee = employeeService.saveEmployee(employeeDTO);
         return new ResponseEntity<>(savedEmployee, HttpStatus.CREATED);
     }
@@ -45,7 +46,7 @@ public class EmployeeController {
      }
 
     @PutMapping("/update-salary/{id}")
-    public ResponseEntity<EmployeeDTO> updateSalary(@PathVariable int id, @RequestParam int salary) {
+    public ResponseEntity<EmployeeDTO> updateSalary(@PathVariable int id, @Valid @RequestParam int salary) {
         EmployeeDTO updatedEmployee = employeeService.updateEmployeeSalary(id, salary);
         if (updatedEmployee == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
