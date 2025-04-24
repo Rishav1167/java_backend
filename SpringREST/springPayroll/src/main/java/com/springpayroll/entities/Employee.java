@@ -3,6 +3,8 @@ package com.springpayroll.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.sql.Date;
+
 @Entity
 @Table(name = "employee")
 @Getter
@@ -17,6 +19,9 @@ public class Employee {
     private int id;
 
     private String name;
+
+    private Character gender;
+    private Date startDate;
 
     private String contact;
 
