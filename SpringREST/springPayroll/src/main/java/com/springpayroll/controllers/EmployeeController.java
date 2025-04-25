@@ -1,8 +1,7 @@
 package com.springpayroll.controllers;
 
 import com.springpayroll.dtos.EmployeeDTO;
-import com.springpayroll.services.EmployeeServices;
-
+import com.springpayroll.services.EmployeeService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,46 +10,52 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/emp")
+@RequestMapping("/employee")
 public class EmployeeController {
+    private final EmployeeService employeeService;
 
-
-    private EmployeeServices employeeService;
-    EmployeeController(EmployeeServices employeeService) {
+    public EmployeeController(EmployeeService employeeService) {
         this.employeeService = employeeService;
     }
 
-    @PostMapping("/post")
-    public ResponseEntity<EmployeeDTO> saveEmployee(@Valid @RequestBody EmployeeDTO employeeDTO) {
-        EmployeeDTO savedEmployee = employeeService.saveEmployee(employeeDTO);
-        return new ResponseEntity<>(savedEmployee, HttpStatus.CREATED);
+    @GetMapping()
+    public String employee() {
+        return "Hello World from Employee Controller";
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<EmployeeDTO>> employeeAll() {
+        return new ResponseEntity<>(employeeService.getAllEmployees(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EmployeeDTO> getEmployees(@PathVariable int id) {
-        EmployeeDTO employeeDTO = employeeService.getEmployeeById(id);
-        if(employeeDTO == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(employeeDTO, HttpStatus.OK);
+    public ResponseEntity<EmployeeDTO> employeeById(@PathVariable Integer id) {
+        return new ResponseEntity<>(employeeService.getEmployeeById(id), HttpStatus.OK);
     }
 
-     @GetMapping("/list")
-    public ResponseEntity<List<EmployeeDTO>> getEmployees() {
-        return new ResponseEntity<>(employeeService.getAllEmployees(), HttpStatus.OK);
-     }
+    @PostMapping("/create")
+    public ResponseEntity<Boolean> createEmployee(@Valid @RequestBody EmployeeDTO employeeDTO) {
+        employeeService.createEmployee(employeeDTO);
+        return new ResponseEntity<>(true, HttpStatus.OK);
+    }
 
-     @DeleteMapping("/{id}")
-    public ResponseEntity<Boolean> deleteEmployee(@PathVariable int id) {
-        return new ResponseEntity<>(employeeService.deleteEmployee(id) , HttpStatus.OK);
-     }
+    @PutMapping("/{id}")
+    public ResponseEntity<Boolean> updateEmployee(@PathVariable Integer id, @Valid @RequestBody EmployeeDTO employeeDTO) {
+        employeeService.updateEmployee(id, employeeDTO);
+        return new ResponseEntity<>(true, HttpStatus.OK);
+    }
 
-    @PutMapping("/update-salary/{id}")
-    public ResponseEntity<EmployeeDTO> updateSalary(@PathVariable int id, @Valid @RequestParam int salary) {
-        EmployeeDTO updatedEmployee = employeeService.updateEmployeeSalary(id, salary);
-        if (updatedEmployee == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Boolean> deleteEmployee(@PathVariable Integer id) {
+        employeeService.deleteEmployee(id);
+        return new ResponseEntity<>(true, HttpStatus.OK);
+    }
+
+    @GetMapping("/query")
+    public ResponseEntity<Object> employeeQuery(@RequestParam("departmentName") String departmentName) {
+        if (departmentName == null || departmentName.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(updatedEmployee, HttpStatus.OK);
+        return ResponseEntity.ok(employeeService.getEmployeeByDepartmentName(departmentName));
     }
 }

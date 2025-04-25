@@ -4,28 +4,36 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "employee")
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@ToString
 public class Employee {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
+    private Integer id;
     private String name;
-
-    private Character gender;
+    private String gender;
     private Date startDate;
 
-    private String contact;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "payroll_id", referencedColumnName = "id")
+    @OneToOne
+    @JoinColumn(name = "payroll_id")
     private Payroll payroll;
+
+    @ManyToMany
+    @JoinTable(
+            name = "employee_department",
+            joinColumns = @JoinColumn(name = "employee_id"),
+            inverseJoinColumns = @JoinColumn(name = "department_id")
+    )
+    private List<Department> departments;
+
+
 }

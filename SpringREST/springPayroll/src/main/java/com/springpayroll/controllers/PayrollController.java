@@ -1,34 +1,53 @@
 package com.springpayroll.controllers;
 
+import com.springpayroll.dtos.EmployeeDTO;
 import com.springpayroll.dtos.PayrollDTO;
-import com.springpayroll.services.PayrollServices;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.springpayroll.services.PayrollService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/payroll")
 public class PayrollController {
+    private final PayrollService payrollService;
 
-    @Autowired
-    private PayrollServices payrollService;
-
-    @GetMapping("/{id}")
-    public ResponseEntity<PayrollDTO> getPayrollById(@PathVariable int id) {
-        PayrollDTO payrollDTO = payrollService.getPayrollById(id);
-        if (payrollDTO == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(payrollDTO);
+    public PayrollController(PayrollService payrollService) {
+        this.payrollService = payrollService;
     }
 
-    @GetMapping("/list")
-    public ResponseEntity<List<Object[]>> getPayrollsWithEmployeeNames() {
-        return ResponseEntity.ok(payrollService.getPayrollsWithEmployeeNames());
+    @GetMapping()
+    public String payroll() {
+        return "Hello World From Payroll Controller";
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<PayrollDTO>> payrollAll() {
+        return new ResponseEntity<>(payrollService.getAllPayrolls(), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<PayrollDTO> payrollById(@PathVariable Integer id) {
+        return new ResponseEntity<>(payrollService.getPayrollById(id), HttpStatus.OK);
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<Boolean> createPayroll(@RequestBody PayrollDTO payrollDTO) {
+        payrollService.createPayroll(payrollDTO);
+        return new ResponseEntity<>(true, HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Boolean> updatePayroll(@PathVariable Integer id, @RequestBody PayrollDTO payrollDTO) {
+        payrollService.updatePayroll(id, payrollDTO);
+        return new ResponseEntity<>(true, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Boolean> deletePayroll(@PathVariable Integer id) {
+        payrollService.deletePayroll(id);
+        return new ResponseEntity<>(true, HttpStatus.OK);
     }
 }
